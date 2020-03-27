@@ -1,0 +1,6 @@
+-   id: notebook_convert
+    name: notebook_convert
+    description: convert jupyter notebooks to readable formats
+    entry: python -m nb_lib.tool
+    language: docker
+    files: \.ipynb$
