@@ -2,16 +2,15 @@
 import sys
 import os
 import nbformat
-from nbconvert import RSTExporter
-import pygit2
-from pygit2 import GIT_STATUS_INDEX_NEW, GIT_STATUS_INDEX_MODIFIED
+from nbconvert import MarkdownExporter
+import git
 
-SUPPORTED_FORMATS = "rst"
+SUPPORTED_FORMATS = "md"
 
 
 def main(args):
     notebooks = args[1:]
-    to_format = "rst"
+    to_format = "md"
     converted = [n for n in notebooks if convert(n, to_format=to_format)]
     none_converted = len(converted) == 0
     if len(converted) != 0:
@@ -38,7 +37,10 @@ def convert(notebook: str, to_format="rst") -> bool:
     if not must_convert(notebook, to_format):
         return False
 
-    do_convert(notebook, to_format)
+    try:
+        do_convert(notebook, to_format)
+    except Exception:
+        return False
     return True
 
 
@@ -58,7 +60,7 @@ def do_convert(notebook, to_format):
     print(f"{notebook} {to_format} format is outdated or inexistent, converting ...")
     with open(notebook, "r", encoding="utf-8") as f:
         nb = nbformat.read(f, as_version=4)
-        body, resources = RSTExporter().from_notebook_node(nb)
+        body, resources = MarkdownExporter().from_notebook_node(nb)
         to_path = _convertion_format(notebook, to_format)
         with open(to_path, "w+", encoding="utf-8") as to_file:
             to_file.write(body)
@@ -69,11 +71,8 @@ def do_convert(notebook, to_format):
 
 
 def _is_staged_with_conversion(notebook, to_format):
-    repo = pygit2.Repository(".")
-    staged_statuses = set([GIT_STATUS_INDEX_NEW, GIT_STATUS_INDEX_MODIFIED])
-    staged = [f for f, flag in repo.status().items() if flag in staged_statuses]
     out_file = _convertion_format(notebook, to_format)
-    return (out_file in staged) and (notebook in staged)
+    return git.is_staged(out_file) and git.is_staged(notebook)
 
 
 if __name__ == "__main__":
