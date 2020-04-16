@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 import sys
 import os
-import nbformat
-from nbconvert import MarkdownExporter
-import git
+from .git import is_staged
+from .formatter import convert
 
 SUPPORTED_FORMATS = "md"
 
@@ -19,9 +18,10 @@ def main(args):
         exit(1)
 
     non_staged = [n for n in notebooks if not _is_staged_with_conversion(n, to_format)]
-    if len(non_staged) != 0:
-        for non_s in non_staged:
-            print(f"{non_s} {to_format} representation is not staged")
+    for non_s in non_staged:
+        print(f"{non_s} {to_format} representation is not staged")
+
+    if non_staged:
         exit(1)
 
     exit(0)  # this is fine
@@ -72,7 +72,7 @@ def do_convert(notebook, to_format):
 
 def _is_staged_with_conversion(notebook, to_format):
     out_file = _convertion_format(notebook, to_format)
-    return git.is_staged(out_file) and git.is_staged(notebook)
+    return is_staged(out_file) and is_staged(notebook)
 
 
 if __name__ == "__main__":
