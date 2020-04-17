@@ -2,9 +2,8 @@
 from .formatter import Formatter
 
 
-def main(args):
-    notebooks = args[1:]
-    fmt = Formatter(output="pdf")
+def main(notebooks, output):
+    fmt = Formatter(output=output)
     converted = [n for n in notebooks if convert(fmt, file=n)]
     if converted:
         exit(1)
@@ -37,7 +36,25 @@ def is_staged_with_conversion(fmt: Formatter, file: str) -> bool:
     return is_staged(file) and is_staged(out_file)
 
 
-if __name__ == "__main__":
+def parse_args():
     import sys
 
-    main(sys.argv)
+    fmt_flag = "--format="
+
+    notebooks = []
+    fmt = None
+    args = sys.argv[1:]
+
+    for arg in args:
+        if arg.startswith(fmt_flag):
+            fmt = arg.replace(fmt_flag, "")
+        else:
+            notebooks.append(arg)
+
+    return notebooks, fmt or "md"
+
+
+if __name__ == "__main__":
+
+    notebooks, fmt = parse_args()
+    main(notebooks, output=fmt)
