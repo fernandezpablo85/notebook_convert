@@ -4,6 +4,10 @@ RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python3 \
     pandoc \
+    texlive-xetex \
+    texlive-full \
+    texlive-latex-extra \
+    texlive-generic-extra \
     virtualenv && \
     apt-get clean
 
