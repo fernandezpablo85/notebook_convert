@@ -4,14 +4,20 @@ from nbconvert import MarkdownExporter, PDFExporter, RSTExporter
 from nbconvert.writers import FilesWriter
 
 SUPPORTED_FORMATS = {"md", "pdf", "rst"}
+SUPPORTED_DESTINATIONS_MODES = {"same_place", "mirror_folder"}
 
 
 class Formatter:
-    def __init__(self, output):
-        assert output in SUPPORTED_FORMATS, f"supported formats are {SUPPORTED_FORMATS}"
+    def __init__(self, output_format, destination_mode):
+        assert output_format in SUPPORTED_FORMATS, f"supported formats are {SUPPORTED_FORMATS}"
+        assert (
+            destination_mode in SUPPORTED_DESTINATIONS_MODES
+        ), f"supported destination modes are {SUPPORTED_DESTINATIONS_MODES}"
+
         self.read_encoding = "utf-8"
         self.write_encoding = "utf-8"
-        self.format = output
+        self.format = output_format
+        self.destination_mode = destination_mode
 
         if self.format == "pdf":
             pdf = PDFExporter()
@@ -23,9 +29,16 @@ class Formatter:
         else:
             self.exporter = MarkdownExporter()
 
-    def dst_folder(self, file):
+    def get_output_dir_base(self, file):
+        isMirrorFolder = self.destination_mode == "mirror_folder"
+        return f"converted/to_{self.format}/" if isMirrorFolder else ""
+
+    def get_output_file_path(self, file):
         filePath = file.split("/")[0:-1]
         return "/".join(filePath) + "/" if len(filePath) > 0 else ""
+
+    def dst_folder(self, file):
+        return self.get_output_dir_base(file) + self.get_output_file_path(file)
 
     def dest_file(self, file, withFormat=True):
         return file.split("/")[-1].replace(".ipynb", "." + self.format if withFormat else "")

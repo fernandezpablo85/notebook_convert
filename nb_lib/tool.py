@@ -2,8 +2,8 @@
 from .formatter import Formatter
 
 
-def main(notebooks, output):
-    fmt = Formatter(output=output)
+def main(notebooks, output_format, destination_mode):
+    fmt = Formatter(output_format=output_format, destination_mode=destination_mode)
     converted = [n for n in notebooks if convert(fmt, file=n)]
     if converted:
         exit(1)
@@ -40,21 +40,25 @@ def parse_args():
     import sys
 
     fmt_flag = "--format="
+    destination_flag = "--fileDestinationMode="
 
     notebooks = []
     fmt = None
+    destination = None
     args = sys.argv[1:]
 
     for arg in args:
         if arg.startswith(fmt_flag):
             fmt = arg.replace(fmt_flag, "")
+        elif arg.startswith(destination_flag):
+            destination = arg.replace(destination_flag, "")
         else:
             notebooks.append(arg)
 
-    return notebooks, fmt or "md"
+    return notebooks, fmt or "md", destination or "same_place"
 
 
 if __name__ == "__main__":
 
-    notebooks, fmt = parse_args()
-    main(notebooks, output=fmt)
+    notebooks, fmt, dest_mode = parse_args()
+    main(notebooks, output_format=fmt, destination_mode=dest_mode)
