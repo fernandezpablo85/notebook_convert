@@ -31,7 +31,8 @@ class Formatter:
 
     def dst_folder(self, file):
         isMirrorFolder = self.destination_mode == "mirror_folder"
-        return f"converted/to_{self.format}/" if isMirrorFolder else ""
+        base_dir = f"converted/to_{self.format}/" if isMirrorFolder else ""
+        return base_dir + (file.replace(".ipynb", "") if self.format in ["rst", "md"] else "")
 
     def dst_path(self, file):
         return self.dst_folder(file) + file.replace(".ipynb", f".{self.format}")
