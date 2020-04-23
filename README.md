@@ -53,7 +53,18 @@ repos:
         args: [--format=pdf]
 ```
 
-(If you want both just include the hook twice 🙃)
+If you want the converted files in a separate folder
+
+```yaml
+repos:
+-   repo: https://github.com/fernandezpablo85/notebook_convert
+    rev: v0.0.1
+    hooks:
+    -   id: notebook_convert
+        args: [--format=rst, --fileDestinationMode=mirror_folder]
+```
+
+(If you want more than one just include the hook twice 🙃)
 
 - Run `pre-commit install`
 
