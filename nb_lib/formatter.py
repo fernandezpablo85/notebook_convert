@@ -35,6 +35,9 @@ class Formatter:
 
     def get_output_file_path(self, file):
         filePath = file.split("/")[0:-1]
+        isMultiFilesFormat = self.format in ["rst", "md"]
+        if isMultiFilesFormat:
+            filePath.append(self.dest_file(file, withFormat=False))
         return "/".join(filePath) + "/" if len(filePath) > 0 else ""
 
     def dst_folder(self, file):
