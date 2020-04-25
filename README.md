@@ -37,23 +37,29 @@ This commit hook does a couple of things for you:
 ```yaml
 repos:
 -   repo: https://github.com/fernandezpablo85/notebook_convert
-    rev: v0.0.1
+    rev: <check latest release>
     hooks:
     -   id: notebook_convert
 ```
 
-By default it will generate Markdown output, but you can change it to PDF or RST by doing:
+By default it will generate Markdown output, but you can also:
+
+- Generate [reStructuredText](https://en.wikipedia.org/wiki/ReStructuredText) files setting the `format` flag to `rst`
+
+- Generate PDF files without input cells setting the `format` flag to `pdf`
+
+For example:
 
 ```yaml
 repos:
 -   repo: https://github.com/fernandezpablo85/notebook_convert
-    rev: v0.0.1
+    rev: <check latest release>
     hooks:
     -   id: notebook_convert
         args: [--format=pdf]
 ```
 
-(If you want both just include the hook twice 🙃)
+(If you want more than one representation just include the hook twice 🙃)
 
 - Run `pre-commit install`
 
