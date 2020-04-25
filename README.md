@@ -42,7 +42,7 @@ repos:
     -   id: notebook_convert
 ```
 
-By default it will generate Markdown output, but you can change it to PDF by doing:
+By default it will generate Markdown output, but you can change it to PDF or RST by doing:
 
 ```yaml
 repos:

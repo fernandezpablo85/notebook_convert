@@ -1,9 +1,9 @@
 import os
 import nbformat
-from nbconvert import MarkdownExporter, PDFExporter
+from nbconvert import MarkdownExporter, PDFExporter, RSTExporter
 from nbconvert.writers import FilesWriter
 
-SUPPORTED_FORMATS = {"md", "pdf"}
+SUPPORTED_FORMATS = {"md", "pdf", "rst"}
 
 
 class Formatter:
@@ -18,6 +18,8 @@ class Formatter:
             pdf.exclude_output_prompt = True
             pdf.exclude_input = True
             self.exporter = pdf
+        elif self.format == "rst":
+            self.exporter = RSTExporter()
         else:
             self.exporter = MarkdownExporter()
 
