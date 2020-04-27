@@ -28,7 +28,9 @@ class Formatter:
         body, resources = self.export(file)
 
         fw = FilesWriter()
-        fw.write(body, resources, notebook_name=file.replace(".ipynb", ""))
+        fw.build_directory = os.path.dirname(file)
+        f_name = os.path.basename(file).replace(".ipynb", "")
+        fw.write(body, resources, notebook_name=f_name)
 
     def dst_path(self, file):
         return file.replace(".ipynb", f".{self.format}")
