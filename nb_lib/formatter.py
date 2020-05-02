@@ -41,13 +41,14 @@ class Formatter:
             body, resources = self.exporter.from_notebook_node(nb)
             return self.replace_image_names(body, resources, file)
 
-    def replace_image_names(self, body, resources, filename):
-        filename = os.path.basename(filename.replace(".ipynb", ""))
+    def replace_image_names(self, body, resources, file):
+        f_name = os.path.basename(file).replace(".ipynb", "")
         names = resources["outputs"].keys()
         new_outputs = {}
 
         for i, old_key in enumerate(names):
-            output_name = f"{filename}_{i}.png"
+            _, image_extension = os.path.splitext(old_key)
+            output_name = f"{f_name}_{i}{image_extension}"
             new_outputs[output_name] = resources["outputs"][old_key]
             body = body.replace(old_key, output_name)
 
