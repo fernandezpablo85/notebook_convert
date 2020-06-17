@@ -42,18 +42,27 @@ class Formatter:
             return self.replace_image_names(body, resources, file)
 
     def replace_image_names(self, body, resources, file):
-        f_name = os.path.basename(file).replace(".ipynb", "")
-        names = resources["outputs"].keys()
-        new_outputs = {}
+        names = self._get_output_names(resources)
+        if not names:
+            return body, resources
 
+        f_name = os.path.basename(file).replace(".ipynb", "")
+        new_outputs = {}
         for i, old_key in enumerate(names):
             _, image_extension = os.path.splitext(old_key)
             output_name = f"{f_name}_{i}{image_extension}"
             new_outputs[output_name] = resources["outputs"][old_key]
             body = body.replace(old_key, output_name)
-
         resources["outputs"] = new_outputs
+
         return body, resources
+
+    def _get_output_names(self, resources):
+        """'outputs' may be empty or contain a string. Ask forgiveness, not permission."""
+        try:
+            return resources["outputs"].keys()
+        except Exception:
+            return []
 
     def needs_format(self, file):
         f_path = self.dst_path(file)

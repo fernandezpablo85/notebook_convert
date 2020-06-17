@@ -4,21 +4,19 @@
 
 ## Motivation
 
-- We ❤️ Jupyter Notebooks
+- ✅ Jupyter Notebooks are a great tool for doing data analysis
 
-- Jupyter Notebooks are a great tool for doing data analysis
+- ✅ You should treat them like code and keep them safe and available on a git repository
 
-- You should treat them like code and keep them safe and available on a git repository
+- ⚠️ Jupyter Notebooks format is not so great for doing __code reviews__ or PRs
 
-- Jupyter Notebooks format is not so great for doing code reviews or PRs
-
-- Jupyter Notebook default format is not the best for communicating with less code-literate teams
+- ⚠️ Jupyter Notebook default format is not the best for __communicating__ with less code-literate teams
 
 ## How to solve this with a commit hook
 
 This commit hook does a couple of things for you:
 
-- Lets you choose from a set of available __formats__ (currently Markdown and PDF)
+- Lets you choose from a set of available __formats__ (currently Markdown, ReStructuredText and PDF)
 
 - When committing your notebook, it __checks__ that it has an up to date companion format file
 
